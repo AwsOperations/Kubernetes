@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: app3-nginx
-          image: stacksimplify/kubenginx:1.0.0
+          image: shridharsofts/eksapp3:v3
           ports:
             - containerPort: 80
 ---
