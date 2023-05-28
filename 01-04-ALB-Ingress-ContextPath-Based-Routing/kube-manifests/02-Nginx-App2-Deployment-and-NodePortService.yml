@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: app2-nginx
-          image: stacksimplify/kube-nginxapp2:1.0.0
+          image: shridharsofts/eksapp2:v2
           ports:
             - containerPort: 80
 ---
