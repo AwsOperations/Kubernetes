@@ -106,8 +106,8 @@ kubectl get nodes
 - [AWS Load Balancer Controller Main Git repo](https://github.com/kubernetes-sigs/aws-load-balancer-controller)
 ```t
 # Change Directroy
-cd 08-NEW-ELB-Application-LoadBalancers/
-cd 08-01-Load-Balancer-Controller-Install
+cd NEW-ELB-Application-LoadBalancers/
+cd Load-Balancer-Controller-Install
 
 # Delete files before download (if any present)
 rm iam_policy_latest.json
@@ -128,9 +128,7 @@ aws iam create-policy \
     --policy-document file://iam_policy_latest.json
 
 ## Sample Output
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ aws iam create-policy \
->     --policy-name AWSLoadBalancerControllerIAMPolicy \
->     --policy-document file://iam_policy_latest.json
+
 {
     "Policy": {
         "PolicyName": "AWSLoadBalancerControllerIAMPolicy",
@@ -145,7 +143,7 @@ Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ aws iam creat
         "UpdateDate": "2022-02-02T04:51:21+00:00"
     }
 }
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ 
+
 ```
 - **Important Note:** If you view the policy in the AWS Management Console, you may see warnings for ELB. These can be safely ignored because some of the actions only exist for ELB v2. You do not see warnings for ELB v2.
 
@@ -192,13 +190,7 @@ eksctl create iamserviceaccount \
 - **Sample Output**
 ```t
 # Sample Output for IAM Service Account creation
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ eksctl create iamserviceaccount \
->   --cluster=eksdemo1 \
->   --namespace=kube-system \
->   --name=aws-load-balancer-controller \
->   --attach-policy-arn=arn:aws:iam::180789647333:policy/AWSLoadBalancerControllerIAMPolicy \
->   --override-existing-serviceaccounts \
->   --approve
+
 2022-02-02 10:22:49 [ℹ]  eksctl version 0.82.0
 2022-02-02 10:22:49 [ℹ]  using region us-east-1
 2022-02-02 10:22:52 [ℹ]  1 iamserviceaccount (kube-system/aws-load-balancer-controller) was included (based on the include/exclude rules)
@@ -213,7 +205,7 @@ Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ eksctl create
 2022-02-02 10:23:10 [ℹ]  waiting for CloudFormation stack "eksctl-eksdemo1-addon-iamserviceaccount-kube-system-aws-load-balancer-controller"
 2022-02-02 10:23:29 [ℹ]  waiting for CloudFormation stack "eksctl-eksdemo1-addon-iamserviceaccount-kube-system-aws-load-balancer-controller"
 2022-02-02 10:23:32 [ℹ]  created serviceaccount "kube-system/aws-load-balancer-controller"
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ 
+ 
 ```
 
 ### Step-03-02: Verify using eksctl cli
@@ -222,12 +214,12 @@ Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$
 eksctl  get iamserviceaccount --cluster eksdemo1
 
 # Sample Output
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ eksctl  get iamserviceaccount --cluster eksdemo1
+
 2022-02-02 10:23:50 [ℹ]  eksctl version 0.82.0
 2022-02-02 10:23:50 [ℹ]  using region us-east-1
 NAMESPACE	NAME				ROLE ARN
 kube-system	aws-load-balancer-controller	arn:aws:iam::180789647333:role/eksctl-eksdemo1-addon-iamserviceaccount-kube-Role1-1244GWMVEAKEN
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ 
+
 ```
 
 ### Step-03-03: Verify CloudFormation Template eksctl created & IAM Role
@@ -252,7 +244,7 @@ kubectl describe sa aws-load-balancer-controller -n kube-system
 - **Output**
 ```t
 ## Sample Output
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ kubectl describe sa aws-load-balancer-controller -n kube-system
+
 Name:                aws-load-balancer-controller
 Namespace:           kube-system
 Labels:              app.kubernetes.io/managed-by=eksctl
@@ -261,7 +253,7 @@ Image pull secrets:  <none>
 Mountable secrets:   aws-load-balancer-controller-token-5w8th
 Tokens:              aws-load-balancer-controller-token-5w8th
 Events:              <none>
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ 
+ 
 ```
 
 ## Step-04: Install the AWS Load Balancer Controller using Helm V3 
@@ -317,14 +309,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 - **Sample output for AWS Load Balancer Controller Install steps**
 ```t
 ## Sample Ouput for AWS Load Balancer Controller Install steps
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
->   -n kube-system \
->   --set clusterName=eksdemo1 \
->   --set serviceAccount.create=false \
->   --set serviceAccount.name=aws-load-balancer-controller \
->   --set region=us-east-1 \
->   --set vpcId=vpc-0570fda59c5aaf192 \
->   --set image.repository=602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-load-balancer-controller
+
 NAME: aws-load-balancer-controller
 LAST DEPLOYED: Wed Feb  2 10:33:57 2022
 NAMESPACE: kube-system
@@ -333,7 +318,7 @@ REVISION: 1
 TEST SUITE: None
 NOTES:
 AWS Load Balancer controller installed!
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ 
+ 
 ```
 ### Step-04-03: Verify that the controller is installed and Webhook Service created
 ```t
@@ -343,10 +328,9 @@ kubectl -n kube-system get deployment aws-load-balancer-controller
 kubectl -n kube-system describe deployment aws-load-balancer-controller
 
 # Sample Output
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ kubectl get deployment -n kube-system aws-load-balancer-controller
+
 NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
-aws-load-balancer-controller   2/2     2            2           27s
-Kalyans-MacBook-Pro:08-01-Load-Balancer-Controller-Install kdaida$ 
+aws-load-balancer-controller   2/2     2            2           27s 
 
 # Verify AWS Load Balancer Controller Webhook service created
 kubectl -n kube-system get svc 
@@ -354,10 +338,9 @@ kubectl -n kube-system get svc aws-load-balancer-webhook-service
 kubectl -n kube-system describe svc aws-load-balancer-webhook-service
 
 # Sample Output
-Kalyans-MacBook-Pro:aws-eks-kubernetes-masterclass-internal kdaida$ kubectl -n kube-system get svc aws-load-balancer-webhook-service
+
 NAME                                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
-aws-load-balancer-webhook-service   ClusterIP   10.100.53.52   <none>        443/TCP   61m
-Kalyans-MacBook-Pro:aws-eks-kubernetes-masterclass-internal kdaida$ 
+aws-load-balancer-webhook-service   ClusterIP   10.100.53.52   <none>        443/TCP   61m 
 
 # Verify Labels in Service and Selector Labels in Deployment
 kubectl -n kube-system get svc aws-load-balancer-webhook-service -o yaml
@@ -390,6 +373,7 @@ kubectl -n kube-system get sa aws-load-balancer-controller -o yaml
 kubectl -n kube-system get secret <GET_FROM_PREVIOUS_COMMAND - secrets.name> -o yaml
 kubectl -n kube-system get secret aws-load-balancer-controller-token-5w8th 
 kubectl -n kube-system get secret aws-load-balancer-controller-token-5w8th -o yaml
+
 ## Decoce ca.crt using below two websites
 https://www.base64decode.org/
 https://www.sslchecker.com/certdecoder
@@ -410,6 +394,7 @@ Observation:
 kubectl -n kube-system get pods
 kubectl -n kube-system get pod <AWS-Load-Balancer-Controller-POD-NAME> -o yaml
 kubectl -n kube-system get pod aws-load-balancer-controller-65b4f64d6c-h2vh4 -o yaml
+
 Observation:
 1. Verify "spec.serviceAccount" and "spec.serviceAccountName"
 2. We should find the Service Account Name as "aws-load-balancer-controller"
@@ -483,7 +468,7 @@ helm uninstall aws-load-balancer-controller -n kube-system
 
 
 ## Step-06: Review IngressClass Kubernetes Manifest
-- **File Location:** `08-01-Load-Balancer-Controller-Install/kube-manifests/01-ingressclass-resource.yaml`
+- **File Location:** `Load-Balancer-Controller-Install/kube-manifests/01-ingressclass-resource.yaml`
 - Understand in detail about annotation `ingressclass.kubernetes.io/is-default-class: "true"`
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -504,7 +489,7 @@ spec:
 ## Step-07: Create IngressClass Resource
 ```t
 # Navigate to Directory
-cd 08-01-Load-Balancer-Controller-Install
+cd Load-Balancer-Controller-Install
 
 # Create IngressClass Resource
 kubectl apply -f kube-manifests
