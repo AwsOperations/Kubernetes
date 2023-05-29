@@ -93,7 +93,7 @@ curl -o kubectl.exe https://amazon-eks.s3.us-west-2.amazonaws.com/1.16.8/2020-04
 ```
 - Update the system **Path** environment variable 
 ```
-C:\Users\KALYAN\Documents\kubectlbinary
+C:\Users\shri\Documents\kubectlbinary
 ```
 - Verify the kubectl client version
 ```
