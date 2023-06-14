@@ -36,7 +36,7 @@ https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
 eksctl create cluster --name=eksdemo1 \
                       --region=us-east-1 \
                       --zones=us-east-1a,us-east-1b \
-                      --version="1.21" \
+                      --version="1.27" \
                       --without-nodegroup 
 
 
