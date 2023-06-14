@@ -1,11 +1,11 @@
 
-Step-01: Create a new ec2 instance for bastion host
+## Step-01: Create a new ec2 instance for bastion host
 
 * Install the ec2 instance choosing a public subnet pointing to EKS vpc.
 
 * Create a Security group only allow from My_ip_address
 
-Step 02:
+## Step 02:
 
 * Install Aws CLI
 
@@ -27,7 +27,7 @@ $ kubectl version --short --client
 
 $ kubectl version --client
 
-Step 03: Update kubeconfig
+## Step 03: Update kubeconfig
 
 $ kubectl get cm aws-auth -n kube-system -o yaml > aws-auth.yaml		# For backup
 
@@ -52,7 +52,7 @@ Now check for sts-caller-identity your role arn should be added instead of showi
 
 $ aws sts get-caller-identity
 
-Step 04: Install K9s
+## Step 04: Install K9s
 
 (For Linux/Mac) Paste this into a Linux shell prompt or terminal, and press enter.
 
