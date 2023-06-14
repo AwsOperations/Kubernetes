@@ -33,7 +33,10 @@ $ kubectl get cm aws-auth -n kube-system -o yaml > aws-auth.yaml		# For backup
 
 $ kubectl edit cm aws-auth -n kube-system
 
-Add the below lines and make sure that you change your user arn which is present in IAM user section.
+* Add the below lines and make sure that you change your user arn which is present in IAM user section.
+* If you have problems then refer the link from aws perspective.
+* https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html
+* Go down and you can see edit ConfigMap manually from there you can get the below file 
 
 $ - groups:
       - system:masters
