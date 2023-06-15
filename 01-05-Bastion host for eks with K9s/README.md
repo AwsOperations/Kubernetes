@@ -12,7 +12,7 @@
 $ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
-```
+
 $ Aws configure
 
 * Give your aws user credentials
@@ -26,9 +26,9 @@ Verify the kubectl client version
 $ kubectl version --short --client
 
 $ kubectl version --client
-
+```
 ## Step 03: Update kubeconfig
-
+```
 $ kubectl get cm aws-auth -n kube-system -o yaml > aws-auth.yaml		# For backup
 
 $ kubectl edit cm aws-auth -n kube-system
@@ -54,9 +54,9 @@ $ > ~/.aws/credentials
 Now check for sts-caller-identity your role arn should be added instead of showing credentials.
 
 $ aws sts get-caller-identity
-
+```
 ## Step 04: Install K9s
-
+```
 (For Linux/Mac) Paste this into a Linux shell prompt or terminal, and press enter.
 
 curl -sS https://webi.sh/k9s | sh
@@ -66,7 +66,7 @@ curl -sS https://webi.sh/k9s | sh
 curl.exe https://webi.ms/k9s | powershell
 
 Access the pods
-
+```
 
 
 
