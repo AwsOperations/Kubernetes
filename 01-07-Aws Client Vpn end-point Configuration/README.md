@@ -29,11 +29,15 @@ $ ./easyrsa build-ca nopass
 
 $ ./easyrsa build-server-full server nopass
 
-5. Generate the client certificate and key. Make sure to save the client certificate and the client private key because you will need them when you configure the client. And You can optionally repeat this step for each client (end user) that requires a client certificate and key.
+5. Generate the client certificate and key. Make sure to save the client certificate and the client private key
+ because you will need them when you configure the client. And You can optionally repeat this step for each client
+ (end user) that requires a client certificate and key.
 
 $ ./easyrsa build-client-full client1.domain.tld nopass
 
-6. Copy the server certificate and key and the client certificate and key to a custom folder and then navigate into the custom folder. Before you copy the certificates and keys, create the custom folder by using the mkdir command. The following example creates an awsclientvpn directory in your home directory.
+6. Copy the server certificate and key and the client certificate and key to a custom folder and then navigate into the custom folder.
+Before you copy the certificates and keys, create the custom folder by using the mkdir command.
+The following example creates an awsclientvpn directory in your home directory.
 
 $ mkdir ~/awsclientvpn/
 $ cp pki/ca.crt ~/awsclientvpn/
@@ -43,7 +47,9 @@ $ cp pki/issued/client1.domain.tld.crt ~/awsclientvpn
 $ cp pki/private/client1.domain.tld.key ~/awsclientvpn/
 $ cd ~/awsclientvpn/
 
-7. Upload the server certificate and key and the client certificate and key to ACM. Be sure to upload them in the same Region in which you intend to create the Client VPN endpoint. The following commands use the AWS CLI to upload the certificates. To upload the certificates using the ACM console instead.
+7. Upload the server certificate and key and the client certificate and key to ACM.
+Be sure to upload them in the same Region in which you intend to create the Client VPN endpoint.
+The following commands use the AWS CLI to upload the certificates. To upload the certificates using the ACM console instead.
 
 $ cd ~/awsclientvpn/
 
@@ -60,13 +66,15 @@ To create a Client VPN endpoint
 3. (Optional) Provide a name tag and description for the Client VPN endpoint.
 4. For Client IPv4 CIDR, specify an IP address range, in CIDR notation, from which to assign client IP addresses. For example, 20.0.0.0/20.
 
-NOTE : The address range cannot overlap with the target network address range, the VPC address range, or any of the routes that will be associated with the Client VPN endpoint. You cannot change the client address range after you create the Client VPN endpoint.
+NOTE : The address range cannot overlap with the target network address range, the VPC address range,
+ or any of the routes that will be associated with the Client VPN endpoint. You cannot change the client address range after you create the Client VPN endpoint.
 
 5. For Server certificate ARN, select the ARN of the server certificate that you generated in Step 1.
 
 NOTE: Make sure the server certificate is provisioned with or imported into AWS Certificate Manager (ACM) in the same AWS Region.
 
-6. Under Authentication options, choose Use mutual authentication, and then for Client certificate ARN, select the ARN of the certificate that we imported in Step 1.
+6. Under Authentication options, choose Use mutual authentication, and then for Client certificate ARN,
+ select the ARN of the certificate that we imported in Step 1.
 
 7. Enable Split tunnel.
 
@@ -78,7 +86,8 @@ NOTE: Make sure the server certificate is provisioned with or imported into AWS 
 ```
 ## Step 3: Associate a target network.
 ```
-To allow clients to establish a VPN session, we associate a target network with the Client VPN endpoint. A target network is a Public subnet in a VPC. To associate a target network with the Client VPN endpoint follow the following steps
+To allow clients to establish a VPN session, we associate a target network with the Client VPN endpoint.
+ A target network is a Public subnet in a VPC. To associate a target network with the Client VPN endpoint follow the following steps
 
 1. Open the Amazon VPC console, In the navigation pane, choose Client VPN Endpoints.
 
@@ -98,7 +107,8 @@ To add an authorization rule for the VPC follow these steps
 
 2. Select the Client VPN endpoint to which to add the authorization rule. Choose Authorization rules, and then choose Add authorization rule.
 
-3. For Destination network to enable access, enter the CIDR of the network for which you want to allow access. For example, to allow access to the entire VPC, specify the IPv4 CIDR block of the VPC.
+3. For Destination network to enable access, enter the CIDR of the network for which you want to allow access.
+ For example, to allow access to the entire VPC, specify the IPv4 CIDR block of the VPC.
 
 4. For Grant access to, choose Allow access to all users.
 
@@ -126,19 +136,23 @@ To provide access to the internet
 ```
 ## Step 6: Download the Client VPN endpoint configuration file.
 ```
-The next step is to download and prepare the Client VPN endpoint configuration file. We provide this file to the end-users who need to connect to the Client VPN endpoint. To download and prepare the Client VPN endpoint configuration file
+The next step is to download and prepare the Client VPN endpoint configuration file.
+We provide this file to the end-users who need to connect to the Client VPN endpoint.
+To download and prepare the Client VPN endpoint configuration file
 
 1. Open the Amazon VPC console, In the navigation pane, choose Client VPN Endpoints.
 
 2. Select the Client VPN endpoint that you created for this tutorial, and choose Download client configuration.
 
-3. Locate the client certificate and key that were generated in Step 1. The client certificate and key can be found in the following locations in the cloned OpenVPN easy-rsa repo:
+3. Locate the client certificate and key that were generated in Step 1.
+The client certificate and key can be found in the following locations in the cloned OpenVPN easy-rsa repo:
 
 * Client certificate — easy-rsa/easyrsa3/pki/issued/client1.domain.tld.crt
 
 * Client key — easy-rsa/easyrsa3/pki/private/client1.domain.tld.key
 
-4. Open the Client VPN endpoint configuration file using your preferred text editor. Add and tags to the file. Place the contents of the client certificate and the contents of the private key between the corresponding tags, as such:
+4. Open the Client VPN endpoint configuration file using your preferred text editor.
+Add and tags to the file. Place the contents of the client certificate and the contents of the private key between the corresponding tags, as such:
 
 <cert>
 Contents of client certificate (.crt) file
@@ -172,7 +186,8 @@ Download the OpenVPN client here https://openvpn.net/vpn-client/
 
 Open the configuration file in Notepad
 
-After the ca certificate key below paste the below lines and in the middle of the content open your (client1.domain.tld.crt) if you are using linux mission use cat command to view and copy the key paste inside middle of the content and save as .ovpn extension and import the config file via openvpn client.
+After the ca certificate key below paste the below lines and in the middle of the content open your (client1.domain.tld.crt)
+if you are using linux mission use cat command to view and copy the key paste inside middle of the content and save as .ovpn extension and import the config file via openvpn client.
 
 $ cat client1.domain.tld.crt
 $ cat client1.domain.tld.key
