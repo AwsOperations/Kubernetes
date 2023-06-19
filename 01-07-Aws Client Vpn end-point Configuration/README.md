@@ -68,6 +68,9 @@ NOTE: Make sure the server certificate is provisioned with or imported into AWS 
 
 6. Under Authentication options, choose Use mutual authentication, and then for Client certificate ARN, select the ARN of the certificate that we imported in Step 1.
 
+![image](https://github.com/AwsOperations/Kubernetes/assets/134834806/389c3e1c-23ac-417b-942b-031248209358)
+
+
 7. Enable Split tunnel.
 
 8. You can Choose your custome vpc which you have created.
