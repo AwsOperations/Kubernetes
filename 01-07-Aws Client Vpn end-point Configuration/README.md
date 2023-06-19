@@ -68,8 +68,6 @@ NOTE: Make sure the server certificate is provisioned with or imported into AWS 
 
 6. Under Authentication options, choose Use mutual authentication, and then for Client certificate ARN, select the ARN of the certificate that we imported in Step 1.
 
-![vpn](https://github.com/AwsOperations/Kubernetes/assets/134834806/bcdfe7d6-59c5-489e-b543-d0e9fccf3717)
-
 7. Enable Split tunnel.
 
 8. You can Choose your custome vpc which you have created.
@@ -101,8 +99,6 @@ To add an authorization rule for the VPC follow these steps
 2. Select the Client VPN endpoint to which to add the authorization rule. Choose Authorization rules, and then choose Add authorization rule.
 
 3. For Destination network to enable access, enter the CIDR of the network for which you want to allow access. For example, to allow access to the entire VPC, specify the IPv4 CIDR block of the VPC.
-
-https://miro.medium.com/max/875/1*byiii6Ihg-YAT2ThnBVUSQ.png
 
 4. For Grant access to, choose Allow access to all users.
 
