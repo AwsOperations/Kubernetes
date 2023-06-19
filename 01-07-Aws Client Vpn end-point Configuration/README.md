@@ -68,8 +68,7 @@ NOTE: Make sure the server certificate is provisioned with or imported into AWS 
 
 6. Under Authentication options, choose Use mutual authentication, and then for Client certificate ARN, select the ARN of the certificate that we imported in Step 1.
 
-![image](https://github.com/AwsOperations/Kubernetes/assets/134834806/389c3e1c-23ac-417b-942b-031248209358)
-
+![vpn](https://github.com/AwsOperations/Kubernetes/assets/134834806/bcdfe7d6-59c5-489e-b543-d0e9fccf3717)
 
 7. Enable Split tunnel.
 
