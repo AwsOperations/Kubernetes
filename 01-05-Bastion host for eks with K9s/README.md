@@ -56,7 +56,7 @@ if still you are not able to access the cluster you need to add 443 port to the 
 
 Click on Eks cluster --> Open Networking tab --> Open Cluster security group --> Inbound rules --> add rule 443 --> in source add jump server security group
 ```
-## Step 04 - ####### Role access for eks cluster from bastion host. Below is via Aws Role Policy !
+## Step 04 - Role access for eks cluster from bastion host. Below is via Aws Role Policy !
 ```
 Now create a IAM ec2 service empty role (Eks-jump-server-role) without policy added and add it to the EC2 jump server
 Next edit the kubectl using below commands to add
