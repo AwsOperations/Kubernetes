@@ -18,19 +18,19 @@ systemctl status jenkins --no-pager -l
 sudo systemctl enable --now jenkins
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
-# wait for jenkins start up
-response=""
-key=""
-while [ `echo $response | grep 'Authenticated' | wc -l` = 0 ]; do
-  key=`sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
-  echo $key >> /tmp/status.txt
-  response=`sudo java -jar /var/cache/jenkins/war/WEB-INF/lib/cli-2.401.1.jar -s http://localhost:8080 who-am-i --username admin --password $key`
-  sudo echo $response
-  sudo echo "Jenkins not started, wait for 2s"
-  sleep 2
-done >> /tmp/status.txt
-echo "Jenkins started" >> /tmp/status.txt
-echo "Install Plugins" >> /tmp/status.txt
+# # wait for jenkins start up
+# response=""
+# key=""
+# while [ `echo $response | grep 'Authenticated' | wc -l` = 0 ]; do
+#   key=`sudo cat /var/lib/jenkins/secrets/initialAdminPassword`
+#   echo $key >> /tmp/status.txt
+#   response=`sudo java -jar /var/cache/jenkins/war/WEB-INF/lib/cli-2.401.1.jar -s http://localhost:8080 who-am-i --username admin --password $key`
+#   sudo echo $response
+#   sudo echo "Jenkins not started, wait for 2s"
+#   sleep 2
+# done >> /tmp/status.txt
+# echo "Jenkins started" >> /tmp/status.txt
+# echo "Install Plugins" >> /tmp/status.txt
 
 # sudo apt update
 # sudo apt install openjdk-11-jre
