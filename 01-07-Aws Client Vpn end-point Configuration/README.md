@@ -1,6 +1,5 @@
 
-**Aws client Vpn endpoint Configuration
-**
+## Aws client Vpn endpoint Configuration
 ```
 Prerequisite
 
