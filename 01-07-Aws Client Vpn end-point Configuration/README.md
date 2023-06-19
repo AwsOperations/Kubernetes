@@ -1,15 +1,16 @@
 
-Aws client Vpn endpoint Configuration
-
+**Aws client Vpn endpoint Configuration
+**
+```
 Prerequisite
 
 VPC with at least a private and public subnet
 Permissions to create Client VPN
 A privately hosted RDS or an EC2 to check and verify the connection
 Permissions to import certificates into AWS Certificate Manager.
-
-Step 1: Generate server and client certificates and keys
-
+```
+## Step 1: Generate server and client certificates and keys
+```
 We need to generate server and client certificates first. So to generate the server and client certificates follow the following steps
 
 1. Clone the OpenVPN easy-rsa repo to your local computer and navigate to the easy-rsa/easyrsa3 folder.
@@ -50,9 +51,9 @@ $ cd ~/awsclientvpn/
 $ aws acm import-certificate --certificate fileb://server.crt --private-key fileb://server.key --certificate-chain fileb://ca.crt
 
 $ aws acm import-certificate --certificate fileb://client1.domain.tld.crt --private-key fileb://client1.domain.tld.key --certificate-chain fileb://ca.crt
-
-Step 2: Create a Client VPN endpoint.
-
+```
+## Step 2: Create a Client VPN endpoint.
+```
 To create a Client VPN endpoint
 
 1. Open the Amazon VPC console.
@@ -75,9 +76,9 @@ NOTE: Make sure the server certificate is provisioned with or imported into AWS 
 9. And choose appropriate security group in my case its private.
 
 10. Vpn port is 443
-
-Step 3: Associate a target network.
-
+```
+## Step 3: Associate a target network.
+```
 To allow clients to establish a VPN session, we associate a target network with the Client VPN endpoint. A target network is a Public subnet in a VPC. To associate a target network with the Client VPN endpoint follow the following steps
 
 1. Open the Amazon VPC console, In the navigation pane, choose Client VPN Endpoints.
@@ -89,9 +90,9 @@ To allow clients to establish a VPN session, we associate a target network with 
 4. For Choose a subnet to associate, choose the subnet to associate with the Client VPN endpoint.
 
 5. Choose Associate target network.
-
-Step 4: Add an authorization rule for the VPC.
-
+```
+## Step 4: Add an authorization rule for the VPC.
+```
 To add an authorization rule for the VPC follow these steps
 
 1. Open the Amazon VPC console, In the navigation pane, choose Client VPN Endpoints.
@@ -107,9 +108,9 @@ https://miro.medium.com/max/875/1*byiii6Ihg-YAT2ThnBVUSQ.png
 5. (Optional) For Description, enter a brief description of the authorization rule.
 
 6. Choose Add authorization rule.
-
-Step 5: Provide access to the internet
-
+```
+## Step 5: Provide access to the internet
+```
 To provide access to the internet
 
 1. Open the Amazon VPC console, In the navigation pane, choose Client VPN Endpoints.
@@ -125,9 +126,9 @@ To provide access to the internet
 6. For Destination network to enable access, enter 0.0.0.0/0, and choose Allow access to all users.
 
 7. Choose Add authorization rule.
-
-Step 6: Download the Client VPN endpoint configuration file.
-
+```
+## Step 6: Download the Client VPN endpoint configuration file.
+```
 The next step is to download and prepare the Client VPN endpoint configuration file. We provide this file to the end-users who need to connect to the Client VPN endpoint. To download and prepare the Client VPN endpoint configuration file
 
 1. Open the Amazon VPC console, In the navigation pane, choose Client VPN Endpoints.
@@ -159,17 +160,17 @@ Modified DNS name: asdfa.cvpn-endpoint-0102bc4c2eEXAMPLE.prod.clientvpn.us-west-
 6. Save and close the Client VPN endpoint configuration file.
 
 7. Distribute the Client VPN endpoint configuration file to your end-users.
-
-Step 8: Connect to the Client VPN endpoint.
-
+```
+## Step 8: Connect to the Client VPN endpoint.
+```
 Download the OpenVPN client here https://openvpn.net/vpn-client/
 
 Here we used ubuntu and are using the OpenVPN command to connect to VPN
 
 sudo openvpn --config <filename.ovpn>
-
-Step 9: Connect to the Client Vpn endpoint for windows.
-
+```
+## Step 9: Connect to the Client Vpn endpoint for windows.
+```
 Download the OpenVPN client here https://openvpn.net/vpn-client/
 
 Open the configuration file in Notepad
@@ -186,5 +187,5 @@ Contents of client certificate (.crt) file
 <key>
 Contents of private key (.key) file
 </key>
-
+```
 
