@@ -11,5 +11,12 @@
   - EKS Control Plane
   - EKS Worker Nodes
   - EKS Fargate Profile
-- Delete EKS Clusters 
+- Delete EKS Clusters
+- Creating Ingress Controllers and Load balancers
+- Creating deployment files and applications
+- Implementing Context path based routing
+- Implementing Bastions host for k9s
+- Installation of Jenkings server
+- Implementation of Client VPN end point
+- Centralized logging with EFK and EKS clusters
 
