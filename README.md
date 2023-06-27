@@ -16,7 +16,7 @@
 - Creating deployment files and applications
 - Implementing Context path based routing
 - Implementing Bastions host for k9s
-- Installation of Jenkings server
+- Installation of Jenkins server
 - Implementation of Client VPN end point
 - Centralized logging with EFK and EKS clusters
 
