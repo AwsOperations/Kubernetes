@@ -19,4 +19,5 @@
 - Installation of Jenkins server
 - Implementation of Client VPN end point
 - Centralized logging with EFK and EKS clusters
+- Centralized logging with Cloudwatch and EKS clusters
 
