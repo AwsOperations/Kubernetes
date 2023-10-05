@@ -1,0 +1,19 @@
+SOP (Standard Operating Procedure)
+
+1. In a Ec2 machine disk space is increased and the ebs volume was occupied with complete 60gb out of 59.9gb How to troubleshoot ?
+
+Resolution:
+
+1. find the instance and goto instance ebs volume 
+2. goto actions --> modify volume --> 150gb
+3. login to the modified ec2 instance and execute the below commands
+
+$ lsblk
+$ docker image prune -a
+$ docker system prune -a
+$ sudo growpart /dev/xvda 1
+$ sudo resize2fs /dev/xvda1
+
+Now check the partition using lsblk it should have been increased.
+
+2. 

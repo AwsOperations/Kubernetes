@@ -1,0 +1,110 @@
+https://pratapsatve.wordpress.com/2017/11/05/install-remove-mongodb-on-centos/
+
+sudo yum erase $(rpm -qa | grep mongodb-org)
+
+
+https://frugalisminds.com/how-to-install-mongodb4-on-centos-7/
+
+
+if you face error on uninstalling or mongod service not running do below things
+
+sudo systemctl stop mongod
+sudo yum remove mongodb-org
+sudo yum erase $(rpm -qa | grep mongodb-org)
+sudo rm -rf /var/lib/mongo
+sudo rm -rf /var/log/mongodb
+sudo userdel mongod
+sudo rm -rf /etc/mongod*
+sudo yum autoremove
+ls -l /tmp/mongodb-27017.sock
+cd /tmp
+rm -rf mongodb-27017.sock
+rpm -qa | grep mongo
+sudo rm -rf /etc/mongod*
+sudo rm -rf /var/lib/mongo
+sudo rm -rf /var/log/mongodb
+sudo systemctl daemon-reload
+ps aux | grep mongo
+
+----------------------------------------------------------------------------------------------------------------------------------------
+Installation of Mongodb:
+
+sudo rpm --import https://www.mongodb.org/static/pgp/server-5.0.asc
+sudo vi /etc/yum.repos.d/mongodb-org-5.0.repo
+
+[mongodb-org-5.0]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/5.0/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-5.0.asc
+
+sudo yum update
+sudo yum install mongodb-org
+sudo systemctl start mongod
+sudo systemctl enable mongod
+
+sudo yum install -y mongodb-org-5.0.19 mongodb-org-database-5.0.19 mongodb-org-server-5.0.19 mongodb-org-shell-5.0.19 mongodb-org-mongos-5.0.19 mongodb-org-tools-5.0.19
+
+disable firewalld
+-----------------------------------------------------------------------------------------------------------------------------------------
+https://www.linuxhelp.com/how-to-create-and-configure-mongodb-on-centos-7-6
+
+nano /etc/mongod.conf
+
+security:
+  authorization: enabled
+
+restart the service
+
+$ mongo -u kyc -p nktech@123 --authenticationDatabase admin                     ------------>10.10.10.108
+
+
+$ db.createUser({
+  user: "kyc",
+  pwd: "nktech@123",
+  roles: [{ role: "root", db: "admin" }]
+})
+
+$ db.getUsers();
+$ use profilex-core
+
+$ db.createRole({
+  role: "profilexAdmin",
+  privileges: [
+    { resource: { db: "profilex-core", collection: "" }, actions: ["collStats", "find", "insert", "remove", "update", "createIndex", "dropIndex", "listIndexes", "listCollections", ] }
+  ],
+  roles: []
+})
+
+$ db.updateRole("profilexAdmin", {
+   privileges: [
+      { resource: { db: "profilex-core", collection: "" }, actions: ["collStats", "find", "insert", "remove", "update", "createIndex", "dropIndex", "listIndexes", "listCollections", "dropCollection", "dropIndex" ] }
+   ]
+})
+
+$ db.getRole("profilexAdmin")
+
+
+$ db.createUser({
+  user: "profilex",
+  pwd: "NKtech123",
+  roles: [{ role: "profilexAdmin", db: "profilex-core" }]
+})
+
+$ mongodb://profilex:NKtech123@10.10.10.108:27017/profilex-core
+$ mongodb://profilex:NKtech123@10.10.10.109:27017/profilex-core
+
+$ db.new.drop()
+
+# dev-mongodb
+$ mongodb://profilex:NKtech123@10.10.10.108:27017/profilex-core
+
+# qa-mongodb
+$ mongodb://profilex:NKtech123@10.10.10.109:27017/profilex-core
+
+
+
+
+
+

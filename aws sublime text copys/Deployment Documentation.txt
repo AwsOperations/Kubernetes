@@ -1,0 +1,101 @@
+
+Deployment
+
+step 01: Find Environment name Dev/QA
+
+Environment name: Dev
+
+Step 02: Create a new project in jenkins 
+
+Project name: KYC-V2
+Goto jenkins create a New item 
+Choose pipeline project
+Name of the pipeline is [admin-ui-next-app]
+Now copy a pipeline from previous project or Build a new pipeline
+
+Step 03: Find repo name and repo branch name
+
+Repo name: profilex-ui 		[this you will get from bitbucket repository]
+Repo branch name: dev  		[this also you will get from bitbuket repository]
+
+Step 04: Find Application type like its frontend or backend
+
+Note: If it is frontend we no need [.env] file, If it is backend we need [.env] file.
+
+Step 05: Find which port nextjs app is running on
+
+Port: 3000
+
+Step 06: Create a domain name in godaddy for the application with static ip.
+
+domain name: kyc-dev.neokred.tech
+
+Step 07: Docker file setup [co-ordinate with the developers] 
+
+Write a docker compose file and .dockerignore file 
+
+Step 08: Goto Dockerhub and create Private repository to push the builds
+
+How you gave docker image name inside docker-compose the same name should be given while creating a dockerhub private repository
+Cross check the name with docker-compose and dockerhub private repository
+
+Step 09: Create a Dockerfile if the repository is not having one.
+
+here we took Dockerfile from PPI-V2-admin-ui
+
+Step 10: Changes to be done in package.json file for the current repo which is deployed in profilex
+		 Add one more file called .npmrc file
+
+"neo-ui" = "^0.1.0" 						-----------> inside package.json file
+add .npmrc file with registry mentioned				-----------> registry
+
+Step 11: Add new route configuration to APISIX
+
+Create route 
+
+Name: V2-dev-kyc-admin-ui-route
+Version: V2
+Host: kyc-dev.neokred.tech
+Targets *Host: 10.10.10.106		Port: 3000
+
+Step 12: Check whether passwordless authentication is enabled between jenkins and Kyc-Virtual machine(10.10.10.106)
+		 Check whether docker and docker-compose is installed in both the Virtual machines like (jenkins machine and Kyc-Virtual machine)
+		 Check whether docker network has been created inside target virtual machine that is (10.10.10.106)
+
+Step 13: Now make changes in your pipeline like below:
+
+1. Make changes in Git checkout
+
+- checkout from bitbucket name (admin-ui)
+- branch name (dev)
+
+2. To build image add docker compose commands and make changes for docker.
+
+- docker-compose and docker should be installed in jenkins vm			-----> make sure docker-compose is installed inside your jenkins VM.
+- docker login -u "neokredtechnologies" -p "LinuxSys@2" docker.io 		-----> make sure you have done docker login in target VM (10.10.10.106)
+- make necessary changes to build image and push image stages according to the environment
+
+
+
+
+sh 'docker rmi neokredtechnologies/qa_cb_onepay_service:latest'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

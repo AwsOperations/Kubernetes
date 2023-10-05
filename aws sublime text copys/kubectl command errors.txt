@@ -1,0 +1,8 @@
+To increase the max number of replicas for your Horizontal Pod Autoscaler, you can use the kubectl edit command to modify the spec.maxReplicas field of your resource. For example, you can run:
+
+kubectl edit hpa hpa-demo-deployment
+
+This will open an editor where you can change the maxReplicas value from 10 to 25 and save the file. Alternatively, you can use the kubectl patch command to update the maxReplicas value directly. For example, you can run:
+
+kubectl patch hpa hpa-demo-deployment --patch '{"spec":{"maxReplicas":25}}'
+

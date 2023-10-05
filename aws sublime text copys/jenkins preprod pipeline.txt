@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+ environment {
+        AWS_ACCOUNT_ID=“009926674974”
+        AWS_DEFAULT_REGION=“ap-south-1"
+        IMAGE_TAG=“$BUILD_NUMBER”
+        JAVA_HOME = tool ‘Jdk9’
+        MAVEN_HOME= tool ‘Maven_3.6.3’
+        REPO_NAME = ‘cb_eskay_service_prod’
+        REPO_URI= “${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPO_NAME}”
+    }
+    stages {
+        stage (‘Checkout’) {
+      steps {
+         checkout changelog: false, poll: true, scm: [$class: ‘GitSCM’, branches: [[name: ‘*/master’]], extensions: [], userRemoteConfigs: [[credentialsId: ‘041611cf-0ee1-484b-834e-e2f3c0a8c5a7’, url: ‘git@bitbucket.org:neokredx/cb_eskay_service.git’]]]
+       }
+    }
+        stage (‘Building image’) {
+      steps{
+        script {
+         sh “cp /home/nkadmin/collectbot_prod_env/Env/cb_eskay_service/.env . ”
+         sh “aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com”
+         dockerImage = docker.build “${REPO_NAME}:${IMAGE_TAG}”
+         sh “docker tag ${REPO_NAME}:${IMAGE_TAG} ${REPO_URI}:$IMAGE_TAG”
+        }
+      }}
+       stage (‘Upload image to ECR’) {
+      steps{
+        script {
+        sh “docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}”
+        }
+      }}
+      stage (“Deployment”){
+      steps{
+        sh “chmod +x tag.sh”
+        sh “./tag.sh”
+        sh “kubectl config use-context arn:aws:eks:ap-south-1:009926674974:cluster/eks-neokred-collectbot-prod-mi”
+	    sh “kubectl apply -f update_cb_eskay_service_all.yaml”
+   	}
+  }
+   }
+	}
+
+
+
+
+jdk-21
+Maven-3.9.4
+git

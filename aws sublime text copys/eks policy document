@@ -1,0 +1,210 @@
+aws configure --profile useast1
+aws configure list
+export AWS_PROFILE=useast1
+aws configure
+
+url : https://402204818948.signin.aws.amazon.com/console
+username : admin
+pass : Admin@123
+
+access key: AKIAV3JKGPYCJT3QXFPK
+secret key: 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
+----------------------------------------------------------------
+https://969163228115.signin.aws.amazon.com/console
+New preprod account: 969163228115
+username: sridhar
+password: s8Uy)kkO|Ks^883r
+
+access key: AKIA6DJVBIPJUAC4CTDO
+secret key: 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
+
+---------------------------------------------------------------
+
+Hello Sridhar
+Please find the details of our AWS Prod & Pre-Prod account.
+
+URL: https://009926674974.signin.aws.amazon.com/console
+
+IAM ID: sreedhar.r
+
+Password: BCcy{V9}#U$[jwQ1q
+
+note: Two-Factor Authentication is enabled.
+
+aws sts get-caller-identity
+-----------------------------------------------------------------
+
+To set a profile as permanent for AWS CLI, you can use the environment variable AWS_PROFILE and assign it the name of the profile you want to use by default. For example, if you want to use the profile user2 as your default profile, you can run the following command:
+
+On Linux, macOS, or Unix: export AWS_PROFILE=user2
+On Windows: set AWS_PROFILE=user2
+This will make the user2 profile the default one for all subsequent AWS CLI commands, unless you specify a different profile using the --profile option. To unset the environment variable, you can run:
+
+On Linux, macOS, or Unix: unset AWS_PROFILE
+On Windows: set AWS_PROFILE=
+To make the environment variable persist across sessions, you can add the command to your shell’s startup script, such as ~/.bashrc on Linux or macOS, or C:\Users\USERNAME\.aws\credentials on Windows.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+eksctl create cluster --name=eksdemo1 \
+                      --region=us-east-1 \
+                      --zones=us-east-1a,us-east-1b \
+                      --version="1.27" \
+                      --without-nodegroup 
+
+eksctl create nodegroup --cluster=eksdemo1 \
+                        --region=ap-south-1 \
+                        --name=eksdemo1-ng-private1 \
+                        --node-type=t3.medium \
+                        --nodes-min=2 \
+                        --nodes-max=2 \
+                        --node-volume-size=20 \
+                        --ssh-access \
+                        --ssh-public-key=ap-south-1 \
+                        --managed \
+                        --asg-access \
+                        --external-dns-access \
+                        --full-ecr-access \
+                        --appmesh-access \
+                        --alb-ingress-access \
+                        --node-private-networking       
+
+eksctl utils associate-iam-oidc-provider \
+    --region us-east-1 \
+    --cluster eksdemo1 \
+    --approve
+
+By default EKs logs are stored inside eks worker nodes under the location /var/log/containers
+
+$ aws eks update-kubeconfig --region us-east-1 --name eksdemo1
+
+## send terraform-key.pem to elasticsearch machine and install kubectl and update the above command 
+and start deployment
+
+## still facing problem check with security groups
+
+## aws-configure
+ 
+## to check the containers you have created and to reflect inside elasticsearch below command
+
+## record.kubernetes.pod_name and operator exists
+
+iam policy arn
+
+"PolicyName": "AWSLoadBalancerControllerIAMPolicy"
+
+policy arn : "arn:aws:iam::981368379491:policy/AWSLoadBalancerControllerIAMPolicy"
+
+eksctl create iamserviceaccount \
+  --cluster=eksdemo1 \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --attach-policy-arn=arn:aws:iam::981368379491:policy/AWSLoadBalancerControllerIAMPolicy \
+  --override-existing-serviceaccounts \
+  --approve
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=eksdemo1 \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=us-east-1 \
+  --set vpcId=vpc-01ffea8f8072fa035  \
+  --set image.repository=602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-load-balancer-controller
+
+eksctl create iamserviceaccount \
+  --cluster=eksdemo1 \
+  --namespace=kube-system \
+  --name=fluentd \
+  --attach-policy-arn=arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy \
+  --override-existing-serviceaccounts \
+  --approve
+
+
+Commands used in bastion host:
+
+curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.4/2023-05-11/bin/linux/amd64/kubectl
+    2  sha256sum -c kubectl.sha256
+    3  ls
+    4  curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.1/2023-04-19/bin/linux/amd64/kubectl.sha256
+    5  sha256sum -c kubectl.sha256
+    6  ls
+    7  cat kubectl
+    8  clear
+    9  ls
+   10  chmod +x ./kubectl
+   11  mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+   12  echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
+   13  kubectl version --short --client
+   14  clear
+   15  kubectl version --short --client
+   16  aws configure
+   17  aws eks update-kubeconfig --region us-east-1 --name eksdemo1
+   18  kubectl config view
+   19  clear
+   20  kubectl config view
+   21  kubectl cluster info
+   22  kubectl cluster-info
+   23  kubectl get nodes
+   24  aws configure list
+   25  history
+
+
+
+cp -r /home/shri/k8s-nest/iac/k8s/fluentd
+
+
+$ sudo apt update
+$ sudo apt install build-essential curl git
+
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+$ echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
+$ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+$ brew doctor
+
+brew install jandedobbeleer/oh-my-posh/oh-my-posh
+oh-my-posh font install
+(check the download location and replace below)
+eval "$(oh-my-posh init bash --config /home/linuxbrew/.linuxbrew/Cellar/oh-my-posh/17.9.0/themes/kali.omp.json)"
+
+
+sudo apt update
+
+sudo apt install -y openjdk-17-jre
+
+java -version
+ 
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install jenkins
+
+sudo systemctl enable --now jenkins
+
+sudo systemctl start jenkins.service
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+
+abhishek-paynext
+6u%x9YSD*!9R
+
+
+ens160
+
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ens160:
+      dhcp4: true
+  version: 2
+
+
+v2-dev-kyc-admin-ui
+

@@ -1,0 +1,37 @@
+
+use ppi-v2;
+db;
+show dbs;
+db.users.insert({"id":1})
+show dbs;
+
+db.createRole({
+  role: "ppi-v2-admin",
+  privileges: [
+    { resource: { db: "ppi-v2", collection: "" }, actions: ["collStats", "find", "insert", "remove", "update", "createIndex", "dropIndex", "listIndexes", "listCollections", ] }
+  ],
+  roles: []
+})
+
+db.updateRole("ppi-v2-admin", {
+   privileges: [
+      { resource: { db: "ppi-v2", collection: "" }, actions: ["collStats", "find", "insert", "remove", "update", "createIndex", "dropIndex", "listIndexes", "listCollections", "dropCollection", "dropIndex" ] }
+   ]
+})
+
+db.getRole("ppi-v2-admin");
+
+db.createUser({
+  user: "ppi-v2-user",
+  pwd: "NKtech123",
+  roles: [{ role: "ppi-v2-admin", db: "ppi-v2" }]
+})
+
+$ mongo -u ppi-v2-user -p NKtech123 --authenticationDatabase ppi-v2
+
+mongodb://ppi-v2-user:NKtech123@10.10.10.108:27017/ppi-v2
+mongodb://ppi-v2-user:NKtech123@10.10.10.109:27017/ppi-v2
+
+if mongodb is not starting run the below command
+
+sudo rm /tmp/mongodb-27017.sock

@@ -1,0 +1,11 @@
+we need additional aws managed policys for eks
+
+AmazonEC2ContainerRegistryPowerUser
+
+AmazonEC2ContainerRegistryReadOnly
+
+AmazonEKS_CNI_Policy
+
+AmazonEKSWorkerNodePolicy
+
+AmazonSSMManagedInstanceCore

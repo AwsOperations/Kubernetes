@@ -1,0 +1,241 @@
+eksctl create cluster --name=preproduction \
+                      --region=ap-south-1 \
+                      --zones=ap-south-1a,ap-south-1b \
+                      --version="1.27" \
+                      --without-nodegroup
+
+eksctl create nodegroup --cluster=preproduction \
+                        --region=ap-south-1 \
+                        --name=preprod-ng1 \
+                        --node-type=t3.medium \
+                        --nodes-min=2 \
+                        --nodes-max=8 \
+                        --node-volume-size=100 \
+                        --ssh-access \
+                        --ssh-public-key=ap-south-1 \
+                        --managed \
+                        --external-dns-access \
+                        --full-ecr-access \
+                        --appmesh-access \
+                        --alb-ingress-access \
+                        --node-private-networking
+
+eksctl utils associate-iam-oidc-provider \
+    --region eu-north-1 \
+    --cluster Preprod \
+    --approve
+
+curl -o iam_policy_latest.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam_policy_latest.json
+
+eksctl utils associate-iam-oidc-provider --region=eu-north-1 --cluster=preproduction --approve
+
+arn:aws:iam::402204818948:policy/AWSLoadBalancerControllerIAMPolicy
+
+eksctl create iamserviceaccount \
+  --cluster=preproduction \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller-cluster-autoscaler \
+  --attach-policy-arn=arn:aws:iam::969163228115:policy/AWSLoadBalancerControllerIAMPolicy \
+  --attach-policy-arn=arn:aws:iam::969163228115:policy/AmazonEKSClusterAutoscalerPolicy \
+  --override-existing-serviceaccounts \
+  --approve
+
+602401143452.dkr.ecr.eu-north-1.amazonaws.com
+
+helm repo add eks https://aws.github.io/eks-charts
+
+helm repo update
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=preproduction \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller-cluster-autoscaler \
+  --set region=ap-south-1 \
+  --set vpcId=vpc-06c34566e41950307 \
+  --set image.repository=602401143452.dkr.ecr.ap-south-1.amazonaws.com/amazon/aws-load-balancer-controller
+
+kubectl -n kube-system logs -f deployment.apps/cluster-autoscaler
+
+Login to Jenkins ec2 instance via ssh (Jump Server)
+
+http://ec2-13-51-234-141.eu-north-1.compute.amazonaws.com:8080/
+
+$ sudo su - root
+$ aws configure
+
+access key: AKIAV3JKGPYCJT3QXFPK
+secret key: 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
+
+$ aws sts get-caller-identity
+$ aws eks update-kubeconfig --region ap-south-1 --name preproduction
+
+$ kubectl get pods -o wide
+$ kubectl get nodes
+$ kubectl get ingress
+
+For cluster autoscaler (image)
+
+$ registry.k8s.io/autoscaling/cluster-autoscaler:v1.27.3
+
+$ kubectl -n kube-system set image deployment.apps/cluster-autoscaler cluster-autoscaler=registry.k8s.io/autoscaling/cluster-autoscaler:v1.27.3
+
+----------------------------------------------------------------------------------------------------------
+AmazonEKSClusterAutoscalerPolicy   (Create this eksctl-eksdemo1-cluster-ServiceRole-1VK6R29ROESV1)
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:SetDesiredCapacity",
+                "autoscaling:TerminateInstanceInAutoScalingGroup"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/k8s.io/cluster-autoscaler/enabled": "true",
+                    "aws:ResourceTag/k8s.io/cluster-autoscaler/Preprod-eks": "owned"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeScalingActivities",
+                "ec2:DescribeLaunchTemplateVersions",
+                "autoscaling:DescribeTags",
+                "autoscaling:DescribeLaunchConfigurations",
+                "ec2:DescribeInstanceTypes"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeScalingActivities",
+                "autoscaling:DescribeTags",
+                "ec2:DescribeInstanceTypes",
+                "ec2:DescribeLaunchTemplateVersions"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/k8s.io/cluster-autoscaler/enabled": "true",
+                    "aws:ResourceTag/k8s.io/cluster-autoscaler/preproduction": "owned"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:SetDesiredCapacity",
+                "autoscaling:TerminateInstanceInAutoScalingGroup",
+                "ec2:DescribeImages",
+                "ec2:GetInstanceTypesFromInstanceRequirements",
+                "eks:DescribeNodegroup"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+------------------------------------------------------------------------------------------------------
+
+AutoScalingConsoleFullAccess (eksctl-eksdemo1-nodegroup-eksdemo-NodeInstanceRole-12GNQFRPM63UK)
+
+(give the above access for nodeinstancerole)
+
+------------------------------------------------------------------------------------------------------
+client vpn routing with aws:
+
+vpc range is = 192.168.0.0/16  ----------->created by eksctl 
+
+client vpn endpoint range is = 10.0.0.0/20
+
+jenkins should be installed in private ap-south-1a subnet
+
+security groups of jenkins should allow port 22 with 192.168.0.0/16 as cidr
+because when vpn is connected an ip will be assigned by vpn with the same series of 192.168.0.0/16 to communicate with the nodegroup and private subnets
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------
+
+To configure a bastion host which is in public subnet,
+
+To set up a bastion host in your AWS VPC in such a way that it can only be accessed through the Client VPN and not directly from your local machine, you can follow these steps:
+
+Create a Bastion Host Instance:
+
+Launch a new EC2 instance in the public subnet of ap-south-1a. This will be your bastion host.
+Ensure the instance has a security group that allows incoming SSH (port 22) connections only from the IP range of your Client VPN CIDR (e.g., 10.0.0.0/20).
+Client VPN Security Group:
+
+Ensure the security group associated with your Client VPN Endpoint allows outgoing SSH traffic (port 22) to the bastion host's security group.
+Local Machine Restrictions:
+
+On your local machine, ensure that there are no firewall rules or port forwarding configurations that allow SSH access to the bastion host's public IP address. Your local machine should not have direct access to the bastion host.
+Routing and Network ACLs:
+
+Confirm that the route tables and network ACLs for the public subnet do not allow SSH traffic from your local machine's IP address range. The default route should be through the Internet Gateway as is typically configured for public subnets.
+Test from Local Machine:
+
+Test SSH access to the bastion host from your local machine. You should not be able to connect directly.
+Test via Client VPN:
+
+Connect to the Client VPN from your local machine and attempt to SSH to the bastion host. You should be able to connect via the VPN.
+
+---------------------------------------------------------------------------------------------------------
+
+## Install ubuntu machine with the below steps
+
+- install jenkins 
+- install docker
+- install aws cli
+- aws configure
+- aws ecr login
+- install kubectl
+
+jenkins url
+
+cp /var/lib/jenkins/env/coll
+http://192.168.89.132:8080/
+
+- Create a repository inside ecr everytime we need to create a new repository and update that repo details in jenkins pipeline also.
+
+- install plugins inside jenkins plugins management (Docker, Docker-pipeline, kubernetes cli)
+
+Steps for troubleshooting jenkins ubuntu machine
+{
+ aws configure list
+   98  curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"~
+   99  ls
+  100  chmod +x ./kubectl
+  101  sudo mv ./kubectl /usr/local/bin
+  102  kubectl version
+  103  kubectl
+  104  kubectl get nodes
+  105  kubectl get ns
+  106  kubectl get pods
+  107  kubectl get pods -o wide
+  108  kubectl create ns collectbot
+}

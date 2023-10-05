@@ -1,0 +1,30 @@
+Jenkins user management poc
+---------------------------
+
+Project based Matrix Authorization strategy Plugins should be installed in jenkins 
+Job restrictions plugins should be installed in jenkins
+
+Goto Jenkins -------> Configure Global Security ------->Project based matrix authorization strategy
+
+Now for created users start assigning the permissions 
+Now the users should view only his particular project not other projects so the finegrain permissions will be like the below 
+
+Overall		Job		View
+
+read		Workspace	Read
+
+
+Alter the above changes for every user 
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+After that enter into particular project like Collectbot
+Enable an option called (enable project based security) again finegrain permissions there also.
+
+Job			View
+
+build 			Read
+Cancel
+Workspace
+Read
+

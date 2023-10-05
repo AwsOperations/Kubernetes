@@ -1,0 +1,7 @@
+Aws Organisations best practices:
+
+Monitor activity in the master account using Cloudtrail.
+Do not assign SCP policies at the start instead use all the custom policies inside OU's account itself.
+First deploy everything and then finegrain with SCP's or any other resources from the OU level.
+Test controls on single acccount first.
+See billing is happening on every single account.

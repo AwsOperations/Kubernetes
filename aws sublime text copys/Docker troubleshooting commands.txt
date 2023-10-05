@@ -1,0 +1,59 @@
+
+
+
+
+
+add @tail and give path of the docker container logs and ship it for that alter the below docker container and create a regex that it should show container details and message of the app running inside the container and timing 
+
+Please write in English language.
+
+10.10.10.41
+data-ai-user
+Msi$q1374Ids
+
+-----------------------------------------------------------------------------------------------------------------------------------
+docker container prune -f
+docker image prune -a
+docker system prune -a --------------> this will remove all the images and digest from overlay2 i won't affect running containers
+docker rmi -f imagename
+sh 'docker rmi neokredtechnologies/v2-dev-admin-bcrm-ui:latest'
+find /var/lib/docker/overlay2 -type d -exec rm -r {} +
+
+docker inspect <containername> -----------> this is can find what is inside docker container
+
+sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+
+sudo rm -rf /var/lib/docker
+
+sudo yum autoremove
+
+sudo rm -rf /etc/docker
+
+sudo docker system prune -a
+
+sudo reboot
+
+sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo systemctl start docker
+
+mongod --dbpath /path/to/custom/data/directory
+
+/var/log/mongodb/mongod.log
+
+sudo chown mongod:mongod /var/run/mongodb
+
+
+

@@ -1,0 +1,31 @@
+pipeline {
+	agent any
+	stages {
+		stage (‘checkout’) {
+			steps {
+				checkout changelog: false, poll: true, scm: [$class: ‘GitSCM’, branches: [[name: ‘*/dev’]], extensions: [], userRemoteConfigs: [[url: ’https://nksysadmin:ATBBrFt2Z6b3hNucqWUekYYhdD8k902FA9C8@bitbucket.org/neokredx/admin-ui']]]
+			}
+		}
+		stage (‘build image’) {
+			steps{
+				sh ‘docker-compose build’
+			}
+		}
+		stage (‘push image’) {
+			steps {
+				withCredentials([usernamePassword(credentialsId: ‘dhCredentials’, passwordVariable: ‘dhCredentialsPassword’, usernameVariable: ‘dhCredentialsUser’)]) {
+					sh “docker login -u ${env.dhCredentialsUser} -p ${env.dhCredentialsPassword}”
+					sh ‘docker push neokredtechnologies/v2-dev-ppi-admin-ui:latest’
+				}
+			}
+		}
+		stage (‘run image’){
+			steps{
+				sh “ssh -o StrictHostKeyChecking=no root@10.10.10.101"
+				sh “ssh -o StrictHostKeyChecking=no root@10.10.10.101 docker rm --force v2-dev-ppi-admin-ui”
+				sh “ssh -o StrictHostKeyChecking=no root@10.10.10.101 docker pull neokredtechnologies/v2-dev-ppi-admin-ui”
+				sh “ssh -o StrictHostKeyChecking=no root@10.10.10.101 docker run -d -p 3000:3000 --network ppi-v2-net --name v2-dev-ppi-admin-ui neokredtechnologies/v2-dev-ppi-admin-ui”
+			}
+		}
+	}
+}

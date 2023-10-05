@@ -1,0 +1,25 @@
+
+"neo-ui": "^4.0.3",
+
+uncomment in npmrc file
+
+add one step command line for docker image deletion in jenkins
+
+
+
+
+v2-qa-administration-svc
+
+qa-iam.neokred.tech
+/iam-svc/api/v2/*
+
+
+v2-dev-coreauth-internal
+
+
+
+
+v2-dev-kyc-admin-ui-route
+
+kyc-dev.neokred.tech
+

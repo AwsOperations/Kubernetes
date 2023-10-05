@@ -1,0 +1,11 @@
+} req.headers
+{"level":30,"time":1694762886540,"pid":38,"hostname":"fea9e11474c7","reqId":"req-r","req":{"method":"GET","url":"/rnc-svc/api/v2/leads","hostname":"dev-rnc.neokred.tech:9070","remoteAddress":"10.10.10.170","remotePort":47962},"msg":"incoming request"}
+{"level":50,"time":1694762886557,"pid":38,"hostname":"fea9e11474c7","reqId":"req-r","req":{"method":"GET","url":"/rnc-svc/api/v2/leads","hostname":"dev-rnc.neokred.tech:9070","remoteAddress":"10.10.10.170","remotePort":47962},"res":{"statusCode":500},"err":{"message":"Request failed with status code 401","name":"AxiosError","stack":"AxiosError: Request failed with status code 401\n    at settle (/app/node_modules/axios/dist/node/axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (/app/node_modules/axios/dist/node/axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:526:35)\n    at IncomingMessage.emit (node:domain:489:12)\n    at endReadableNT (node:internal/streams/readable:1359:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Authorization":"undefined","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"http://10.10.10.105:4400/bcrm-svc/api/v2/leads"},"code":"ERR_BAD_REQUEST","status":401},"msg":"Request failed with status code 401"}
+{"level":30,"time":1694762886557,"pid":38,"hostname":"fea9e11474c7","reqId":"req-r","res":{"statusCode":500},"responseTime":17.290555000305176,"msg":"request completed"}
+/rnc-svc/api/v2/leads req.url
+
+
+
+
+we need to change in domain name to ip address in .env file 
+

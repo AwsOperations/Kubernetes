@@ -1,0 +1,100 @@
+url : https://402204818948.signin.aws.amazon.com/console
+username : admin
+pass : Admin@123
+
+access key: AKIAV3JKGPYCJT3QXFPK
+secret key: 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
+----------------------------------------------------------------
+username: 
+access key: AKIA6DJVBIPJUAC4CTDO
+secret key: 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
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: Preprod
+  region: eu-north-1
+
+vpc:
+  id: "vpc-0a0f477ae574b7673" # optional if you want to use a pre-existing VPC
+  subnets:
+    private:
+      eu-north-1a:
+        id: "subnet-0e410d3d23d7116be" 
+      eu-north-1b:
+        id: "subnet-029e614247fbdb6d6"
+
+managedNodeGroups:
+  - name: Preprod-nodegroup1
+    instanceType: t3.medium
+    minSize: 2
+    maxSize: 4
+    desiredCapacity: 2
+    volumeSize: 120
+    privateNetworking: true  # nodes will be in a private subnet
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        externalDNS: true
+        appMesh: true
+        ebs: true
+        fsx: true
+        efs: true
+        awsLoadBalancerController: true # Use this field instead of albIngress
+        cloudWatch: true
+    ssh:
+      allow: true  # Enable SSH access
+      publicKeyPath: preprod  # Specify the SSH public key
+    kubernetesVersion: "1.27"  # Set Kubernetes version to 1.27
+
+
+-----------------------------------------------------------------------------------
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: Preprod
+  region: us-east-1
+  version: "1.27" # Set cluster version to 1.27
+
+vpc:
+  id: "vpc-0a0f477ae574b7673" # optional if you want to use a pre-existing VPC
+  subnets:
+    private:
+      us-east-1a:
+        id: "subnet-0e410d3d23d7116be"
+      us-east-1b:
+        id: "subnet-029e614247fbdb6d6"
+
+managedNodeGroups:
+  - name: Preprod-nodegroup1
+    instanceType: t3.medium
+    minSize: 2
+    maxSize: 4
+    desiredCapacity: 2
+    volumeSize: 120
+    privateNetworking: true  # nodes will be in a private subnet
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        externalDNS: true
+        appMesh: true
+        ebs: true
+        fsx: true
+        efs: true
+        awsLoadBalancerController: true # Use this field instead of albIngress
+        cloudWatch: true
+    ssh:
+      allow: true  # Enable SSH access
+      publicKeyPath: preprod  # Specify the SSH public key
+
+
+
+
+
+
+
+
+

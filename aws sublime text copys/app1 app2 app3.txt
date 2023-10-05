@@ -1,0 +1,26 @@
+# Use a base image with nginx web server
+FROM nginx:alpine
+
+# Copy the index.html file to the default web root directory
+COPY index.html /usr/share/nginx/html
+COPY app1/ /usr/share/nginx/html/app1/
+
+# Expose port 80 for HTTP access
+EXPOSE 80
+
+# Start the nginx server
+CMD ["nginx", "-g", "daemon off;"]
+
+
+<html>
+<head>
+  <title>Preprod App 1</title>
+</head>
+<body style="background-color: #98FB98;">
+  <h1>This is preprod app 1</h1>
+</body>
+</html>
+
+
+------------------------------------------------------------------------
+
