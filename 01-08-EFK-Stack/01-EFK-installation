@@ -87,6 +87,12 @@ sudo systemctl status elasticsearch.service
 sudo systemctl start kibana.service
 sudo systemctl status kibana.service
 
+# adding s3 repository wher efk instance should connect to s3 bucket
+
+create a role with s3 full access and attach that role to efk-instance
+and install s3 plugin inside efk instance
+and configure in stackmanagement
+
 
 
 
